@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors - Premium Game</title>
+    <style>
+        /* 1. Reset and Theme Layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 2. Main Container Card */
+        .game-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        /* 3. Score Board Display */
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .score-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .score-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+        }
+
+        .score-count {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        /* 4. Choice Selection Buttons */
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 36px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #818cf8;
+            box-shadow: 0 10px 20px rgba(129, 140, 248, 0.3);
+        }
+
+        .choice-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 5. Live Match / Battle Field */
+        .battle-field {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s ease;
+        }
+
+        .battle-field.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .battle-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .battle-box span:first-child {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .battle-icon {
+            font-size: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+        }
+
+        .vs {
+            font-weight: 700;
+            color: #ef4444;
+            font-style: italic;
+        }
+
+        /* 6. Results and Action Control */
+        .result-text {
+            font-size: 22px;
+            font-weight: 600;
+            min-height: 33px;
+            margin-bottom: 25px;
+        }
+
+        .win-glow { color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
+        .lose-glow { color: #f87171; text-shadow: 0 0 15px rgba(248, 113, 113, 0.5); }
+        .draw-glow { color: #fbbf24; text-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
+
+        #reset-btn {
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        #reset-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Rock Paper Scissors</h1>
+        <div class="subtitle">First to score wins the bragging rights!</div>
+
+       
+        <div class="score-board">
+            <div class="score-box">
+                <span class="score-title">You</span>
+                <span class="score-count" id="player-score">0</span>
+            </div>
+            <div class="score-box">
+                <span class="score-title">Comp</span>
+                <span class="score-count" id="comp-score">0</span>
+            </div>
+        </div>
+
+  
+        <div class="choices">
+            <button class="choice-btn" data-choice="rock">✊</button>
+            <button class="choice-btn" data-choice="paper">✋</button>
+            <button class="choice-btn" data-choice="scissors">✌️</button>
+        </div>
+
+      
+        <div class="battle-field" id="battle-field">
+            <div class="battle-box">
+                <span>You Picked</span>
+                <div class="battle-icon" id="player-pick">✊</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="battle-box">
+                <span>Comp Picked</span>
+                <div class="battle-icon" id="comp-pick">✊</div>
+            </div>
+        </div>
+
+       
+        <div class="result-text" id="result-message">Choose your weapon!</div>
+
+        <!-- Restart Button -->
+        <button id="reset-btn">Reset Scores</button>
+    </div>
+
+    
+    <script>
+        const choices = ['rock', 'paper', 'scissors'];
+        const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+        
+        let playerScore = 0;
+        let compScore = 0;
+
+        const choiceButtons = document.querySelectorAll('.choice-btn');
+        const playerDisplay = document.getElementById('player-score');
+        const compDisplay = document.getElementById('comp-score');
+        const resultMsg = document.getElementById('result-message');
+        const battleField = document.getElementById('battle-field');
+        const playerPick = document.getElementById('player-pick');
+        const compPick = document.getElementById('comp-pick');
+        const resetBtn = document.getElementById('reset-btn');
+
+        choiceButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const playerChoice = button.getAttribute('data-choice');
+                const compChoice = getComputerChoice();
+                playRound(playerChoice, compChoice);
+            });
+        });
+
+        function getComputerChoice() {
+            const randomIndex = Math.floor(Math.random() * 3);
+            return choices[randomIndex];
+        }
+
+        function playRound(player, comp) {
+         
+            playerPick.innerHTML = emojis[player];
+            compPick.innerHTML = emojis[comp];
+            battleField.classList.add('show');
+
+           
+            if (player === comp) {
+                resultMsg.innerHTML = "It's a tie! 🤝";
+                resultMsg.className = "result-text draw-glow";
+            } 
+            else if (
+                (player === 'rock' && comp === 'scissors') ||
+                (player === 'paper' && comp === 'rock') ||
+                (player === 'scissors' && comp === 'paper')
+            ) {
+                playerScore++;
+                playerDisplay.innerHTML = playerScore;
+                resultMsg.innerHTML = "You Win! 🎉";
+                resultMsg.className = "result-text win-glow";
+            } 
+            else {
+                compScore++;
+                compDisplay.innerHTML = compScore;
+                resultMsg.innerHTML = "Computer Wins! 🤖";
+                resultMsg.className = "result-text lose-glow";
+            }
+        }
+
+     
+        resetBtn.addEventListener('click', () => {
+            playerScore = 0;
+            compScore = 0;
+            playerDisplay.innerHTML = 0;
+            compDisplay.innerHTML = 0;
+            resultMsg.innerHTML = "Choose your weapon!";
+            resultMsg.className = "result-text";
+            battleField.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
