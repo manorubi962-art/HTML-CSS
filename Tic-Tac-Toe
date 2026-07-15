@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* style.css */
+
+/* 1. Poore page ko center me align karne ke liye */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Heading/Title Style */
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Turn aur Status Text */
+#status {
+    color: #e51714; /* Humara signature red color */
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* 2. Tic Tac Toe ka 3x3 Grid Board */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* 3 columns, har ek 100px wide */
+    grid-template-rows: repeat(3, 100px);    /* 3 rows, har ek 100px high */
+    gap: 10px;                               /* Dabbo ke darmiyan gap */
+    background-color: #333;                  /* Grid lines ka color black jaisa dikhega */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. Har dabba (cell) ka style */
+.cell {
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;                         /* X aur O ka size */
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    user-select: none;                       /* Double click karne se text select na ho */
+}
+
+/* Cell par mouse le jaane se halka grey color ho */
+.cell:hover {
+    background-color: #eaeaea;
+}
+
+/* Click karne par chota sa click effect */
+.cell:active {
+    transform: scale(0.95);
+}
+
+/* 4. Reset Button ka Style */
+#reset-btn {
+    margin-top: 25px;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #2e7d32;               /* Pyara green color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(46, 125, 50, 0.3);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#reset-btn:hover {
+    background-color: #1b5e20;               /* Hover par thoda dark green */
+}
+
+#reset-btn:active {
+    transform: scale(0.95);
+}
+    </style>
+</head>
+<body>
+    <div class="board">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+</div>
+
+<h2 id="status">X's Turn</h2>
+<button id="reset-btn">Restart Game</button>
+<script src="tic.js">
+let cells = document.querySelectorAll('.cell');
+let resetBtn = document.getElementById('reset-btn');
+let statusText = document.getElementById('status');
+
+let board = ["", "", "", "", "", "", "", "", ""]; 
+let turnO = true;
+let isGameActive = true;
+const winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],  
+    [0, 4, 8], [2, 4, 6]
+];
+
+cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+        console.log(`Index ${index} par click huwa!`);
+
+        if (cell.innerHTML !== "" || !isGameActive) {
+            return;
+        }
+
+        if (turnO) {
+            cell.innerHTML = "O";
+            board[index] = "O"; 
+            turnO = false;      
+            statusText.innerHTML = "X's Turn";
+        } else {
+            cell.innerHTML = "X";
+            board[index] = "X"; 
+            turnO = true;    
+            statusText.innerHTML = "O's Turn";
+        }
+
+        checkWinner();
+    });
+});
+
+function checkWinner() {
+    let roundWon = false;
+
+    for (let i = 0; i < winPatterns.length; i++) {
+        const pattern = winPatterns[i]; 
+        let pos1 = board[pattern[0]]; 
+        let pos2 = board[pattern[1]]; 
+        let pos3 = board[pattern[2]]; 
+
+        if (pos1 === "" || pos2 === "" || pos3 === "") {
+            continue; 
+        }
+
+        if (pos1 === pos2 && pos2 === pos3) {
+            roundWon = true;
+            break; 
+        }
+    }
+
+    if (roundWon) {
+      
+        let winner = turnO ? "X" : "O"; 
+        statusText.innerHTML = `🎉 Player ${winner} Wins!`;
+        isGameActive = false; // Game stop kar do
+        return;
+    }
+
+    let roundDraw = !board.includes("");
+    if (roundDraw) {
+        statusText.innerHTML = "🤝 It's a Draw!";
+        isGameActive = false;
+    }
+}
+
+if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+        board = ["", "", "", "", "", "", "", "", ""];
+        turnO = true;
+        isGameActive = true;
+        statusText.innerHTML = "O's Turn";
+        cells.forEach(cell => {
+            cell.innerHTML = "";
+        });
+    });
+}
+</script>
+</body>
+</html>
