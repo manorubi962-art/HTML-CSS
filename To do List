@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="todo.css">
+    <title>To Do List</title>
+    <style>
+     *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .todo-list{
+            border: 1px ;
+            box-shadow: 0 4px 20px rgba(99, 90, 90, 0.5);
+            width: 350px;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+         h1{
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgb(13, 243, 13);
+        }
+        .task{
+            /* display: flex; */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #user-task{
+            background: transparent;
+            padding: 8px;
+            flex: 1;
+            margin: 5px;
+            border-radius: 10px;
+            outline: none;
+        }
+        #btn{
+            background-color: rgb(6, 235, 6);
+            color: rgb(5, 5, 5);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px 15px;
+        }
+
+        #tasklist{
+            list-style: none;
+        }
+        #tasklist li {
+    background: #f4f4f4;
+    padding: 10px 15px;
+    margin-top: 8px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between; /* Text left par aur delete button right par */
+    align-items: center;
+    border: 1px solid #ddd;
+}
+.del-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div class="todo-list">
+        <h1>To Do List</h1>
+        <div class="task">
+            <input type="text" placeholder="Enter the Message.." id="user-task">
+            <button id="btn" onclick="addMessage()">Add</button>
+            <ul id="tasklist"></ul>
+        </div>
+    </div>
+    <script src="todolist.js">
+function addMessage(){
+    let task=document.getElementById('user-task');
+    let tasklist=document.getElementById('tasklist');
+    if(task.value.trim()!=""){
+        let li = document.createElement('li');
+        li.innerHTML=task.value;
+       
+        let deleteBtn=document.createElement('button');
+         deleteBtn.innerHTML="Delete";
+         deleteBtn.className="del-btn";
+        deleteBtn.onclick=function(){
+        li.remove();
+
+        };
+        li.appendChild(deleteBtn);
+        tasklist.appendChild(li);
+        task.value="";
+    }
+       function saveTaskToLocal(taskText) {
+    let tasks = localStorage.getItem("myTasks") ? JSON.parse(localStorage.getItem("myTasks")) : [];
+    tasks.push(taskText);
+    localStorage.setItem("myTasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    let tasks = localStorage.getItem("myTasks") ? JSON.parse(localStorage.getItem("myTasks")) : [];
+    tasks.forEach(function(taskText) {
+        createTaskHTML(taskText); 
+    });
+}
+
+function removeTaskFromLocal(taskText) {
+    let tasks = localStorage.getItem("myTasks") ? JSON.parse(localStorage.getItem("myTasks")) : [];
+    tasks = tasks.filter(t => t !== taskText);
+    localStorage.setItem("myTasks", JSON.stringify(tasks));
+}
+       }
+
+
+    </script>
+ </body>
+</html>
