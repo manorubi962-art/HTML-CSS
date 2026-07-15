@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> My Juicer Blender</title>
+    <style>
+        .juicer{
+            width: 400px;
+            background: rgb(40, 37, 37);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0 0 0 0.1);
+            text-align: center;
+            margin: 50px auto;
+            border: 2px solid #e0e0e0;
+        }
+
+        .juicer h2{
+            color: rgb(255, 253, 253);
+            margin-bottom: 20px;
+            font-size: 25px;
+        }
+        #mango-input, #milk-input{
+            width: 90%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+     button {
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: 0.2s;
+    color: white;
+}
+
+#on-btn{
+   background-color:  #28a745;
+}
+
+#off-btn {
+    background-color: #dc3545;
+}
+
+#jug-output {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #dbdee1;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    min-height: 24px;
+    border: 1px dashed #ccc;
+}
+@keyframes juicer {
+    0%{ transform: translate(0,0)}
+    25%{ transform: translate(2px,1px);}
+    50%{ transform: translate(-1px,-1px);}
+        100%{ transform: translate(1px,-1px);}
+}
+.shake-effect{
+    animation: juicer 0.2s infinite;
+}
+@media(max-width: 480px){
+    .juicer{
+        width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .juicer h2{
+        font-size: 20px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="juicer" id="blender-machine">
+        <h2> 🥛My Mango Juice</h2>
+        <input type="text" id="mango-input" placeholder="Add Mango">
+        <input type="text" id="milk-input" placeholder="Add-Milk ">
+        <button id="on-btn" onclick="turnOn()">ON</button>
+        <button id="off-btn" onclick="turnOff()">OFF</button>
+        <div id="jug-output">Blender is OFF..😴</div>
+    </div>
+    <script src="blender.js">
+let btnOn = document.querySelector('button:nth-of-type(1)');
+let btnOff = document.querySelector('button:nth-of-type(2)');
+
+let fruit = document.getElementById('mango-input');
+let liquid = document.getElementById('milk-input');
+let jug = document.getElementById('jug-output');
+
+btnOn.addEventListener('click', function() {
+    let fruitValue = fruit.value.trim();
+    let liquidValue = liquid.value.trim();
+    
+    jug.classList.add("shake-effect");
+    jug.innerHTML = "Blender is ON..";
+    jug.style.color = "green";
+    
+    if (fruitValue === "mango" && liquidValue === "milk") {
+        jug.innerHTML = "Yummy your juice has Ready!!!";
+        jug.style.color = "green";
+    } else {
+        jug.innerHTML = "Galat phly cheesy to dalo shaki wali!!";
+        jug.style.color = "red";
+    }
+});
+
+btnOff.addEventListener('click', function() {
+    jug.classList.remove("shake-effect");
+    jug.innerHTML = "Blender is Off....";
+    jug.style.color = "black";
+});
+    </script>
+</body>
+</html>
