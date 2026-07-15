@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            background-color: #f3f3f315;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            border-radius: 5px;
+            min-height: 100vh;
+        }
+        .chatbot-container{
+            width: 400px;
+            height: 500px;
+            box-shadow: 0 5px 10px rgb(77, 74, 74);
+            border-radius: 5px;
+            background: rgba(243, 243, 243, 0.6);
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .chatbot-Ai{
+            background-color: rgba(47, 7, 223, 0.767);
+            gap: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+        .chatbot-Ai h1{
+            text-align: center;
+            color: rgba(1, 62, 173, 0.767);
+            box-shadow: 0 5px 10px rgba(26, 24, 24, 0.7);
+            background: rgb(6, 197, 6);
+            border-radius: 10px;
+            padding: 15px;
+            font-weight: bold 500;
+        }
+        h2{
+            color: aliceblue;
+            text-align: center;
+            margin: 10px;
+            font-weight: bold;
+            font-size: 25px;
+        }
+        #chat-box{
+            display: flex;
+            overflow-y: auto;
+            flex: 1;
+            flex-direction: column;
+            padding: 15px;
+            gap: 10px;
+            
+        }
+        .input-area{
+            display: flex;
+            padding: 10px;
+            margin: 10px;
+            background: white;
+            margin-left: 20px;
+            padding: 10px 20px;
+           
+            
+        }
+        .input-user{
+            flex: 1;
+            padding: 10px;
+            border: 1px solid;
+            border-radius: 5px;
+         
+        }
+
+        .input-user::placeholder{
+            color:black;
+        }
+        #btn{
+            background-color: rgb(6, 185, 6);
+            padding: 10px 20px;
+            font-size: 15px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 70px;
+
+        }
+        .user-msg{
+            align-self: flex-end;
+            background: rgb(11, 206, 11);
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .chatbot-msg{
+            align-self: flex-start;
+            background: rgba(6, 63, 167, 0.973);
+            padding: 10px;
+            margin: 5px;
+             border-radius: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="chatbot-Ai">
+            <h1>My project</h1>
+            <h2> 🤖 Chatbot AI</h2>
+        </div>
+        <div id="chat-box" class="chat-box" style="height: 250px; border: 1px solid; overflow-y: scroll;"></div>
+        <div class="input-area">
+        <input type="text" placeholder="Message..."  width="200px" id="input-user">
+        <button id="btn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="chatbot3.js">
+        function sendMessage(){
+    let input=document.getElementById('input-user');
+    let chatbox=document.getElementById('chat-box');
+    let userText=input.value;
+    if(userText.trim()!=""){
+
+        let now=new Date();
+      
+        let time = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+       
+        chatbox.innerHTML+=`<div class="user-msg">${userText}</div>`
+        let chatbotReply="";
+        let lowerText=userText.toLowerCase();
+        if(lowerText.includes("hi")){
+            chatbotReply="hi Mano.. May I help you?"
+        }
+        else if(lowerText.includes("mujy courses krna ha kha sa kru")){
+            chatbotReply="ap youtube pr search kr sakty ha courses k mutalik waha bhot sary channels ha apko jo acha lagy apny lia ap usy watch kr sakty ha."
+        }else if(lowerText.includes("thank you so much")){
+            chatbotReply="most welcome..."
+        }else{
+            chatbotReply="mujy ni samj a rhi ap kia khna chaty ha";
+        }
+        chatbox.innerHTML+=`<div class="chatbot-msg">${chatbotReply}<br> <span style="font-size:10px;">${time}</span></div>`;
+        input.value="";
+        chatbox.scrollTop=chatbox.scrollHeight;
+    }
+}
+    </script>
+</body>
+</html>
